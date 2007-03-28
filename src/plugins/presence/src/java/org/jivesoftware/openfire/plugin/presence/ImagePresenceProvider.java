@@ -9,7 +9,7 @@
  * a copy of which is included in this distribution.
  */
 
-package org.jivesoftware.wildfire.plugin.presence;
+package org.jivesoftware.openfire.plugin.presence;
 
 import org.jivesoftware.util.Log;
 import org.xmpp.packet.Presence;

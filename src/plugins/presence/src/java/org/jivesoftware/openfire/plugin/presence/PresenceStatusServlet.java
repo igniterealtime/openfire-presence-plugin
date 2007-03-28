@@ -9,13 +9,13 @@
  * a copy of which is included in this distribution.
  */
 
-package org.jivesoftware.wildfire.plugin.presence;
+package org.jivesoftware.openfire.plugin.presence;
 
 import org.jivesoftware.admin.AuthCheckFilter;
 import org.jivesoftware.util.Log;
-import org.jivesoftware.wildfire.XMPPServer;
-import org.jivesoftware.wildfire.plugin.PresencePlugin;
-import org.jivesoftware.wildfire.user.UserNotFoundException;
+import org.jivesoftware.openfire.XMPPServer;
+import org.jivesoftware.openfire.plugin.PresencePlugin;
+import org.jivesoftware.openfire.user.UserNotFoundException;
 import org.xmpp.packet.Presence;
 
 import javax.servlet.ServletConfig;

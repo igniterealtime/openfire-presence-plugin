@@ -5,14 +5,14 @@
  * Copyright (C) 1999-2005 Jive Software. All rights reserved.
  * This software is the proprietary information of Jive Software. Use is subject to license terms.
  */
-package org.jivesoftware.wildfire.plugin.presence;
+package org.jivesoftware.openfire.plugin.presence;
 
 import org.xmpp.packet.Presence;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.PacketError;
-import org.jivesoftware.wildfire.XMPPServer;
-import org.jivesoftware.wildfire.user.User;
-import org.jivesoftware.wildfire.user.UserNotFoundException;
+import org.jivesoftware.openfire.XMPPServer;
+import org.jivesoftware.openfire.user.User;
+import org.jivesoftware.openfire.user.UserNotFoundException;
 import org.jivesoftware.util.JiveGlobals;
 
 import javax.servlet.http.HttpServletRequest;
