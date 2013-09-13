@@ -5,10 +5,10 @@
     <name>Presence Service</name>
     <description>Exposes presence information through HTTP.</description>
     <author>Jive Software</author>
-    <version>${project.version}</version>
-    <date>tbc.</date>
-    <minServerVersion>4.1.1</minServerVersion>
-    
+    <version>1.6.0</version>
+    <date>09/13/2013</date>
+    <minServerVersion>3.9.0</minServerVersion>
+	
     <adminconsole>		
         <tab id="tab-server">
             <sidebar id="sidebar-server-settings">
