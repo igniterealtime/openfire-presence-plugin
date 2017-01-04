@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2004-2008 Jive Software. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@ import java.io.PrintWriter;
 class XMLPresenceProvider extends PresenceInfoProvider {
 
     @Override
-    public void sendInfo(HttpServletRequest request, HttpServletResponse response,
+	public void sendInfo(HttpServletRequest request, HttpServletResponse response,
             Presence presence) throws IOException {
         response.setContentType("text/xml");
         PrintWriter out = response.getWriter();
@@ -67,7 +67,7 @@ class XMLPresenceProvider extends PresenceInfoProvider {
     }
 
     @Override
-    public void sendUserNotFound(HttpServletRequest request, HttpServletResponse response)
+	public void sendUserNotFound(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         response.setContentType("text/xml");
         PrintWriter out = response.getWriter();

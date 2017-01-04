@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2004-2008 Jive Software. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@ import org.jivesoftware.openfire.PresenceManager;
 import org.jivesoftware.openfire.XMPPServer;
 import org.jivesoftware.openfire.container.Plugin;
 import org.jivesoftware.openfire.container.PluginManager;
-import org.jivesoftware.openfire.container.PluginMetadataHelper;
 import org.jivesoftware.openfire.user.User;
 import org.jivesoftware.openfire.user.UserManager;
 import org.jivesoftware.openfire.user.UserNotFoundException;
@@ -58,8 +57,8 @@ import org.xmpp.packet.Presence;
  */
 public class PresencePlugin implements Plugin, Component {
 
-    private static final Logger Log = LoggerFactory.getLogger(PresencePlugin.class);
-    
+	private static final Logger Log = LoggerFactory.getLogger(PresencePlugin.class);
+	
     private static final String subdomain = "presence";
 
     private UserManager userManager;
@@ -102,11 +101,11 @@ public class PresencePlugin implements Plugin, Component {
     }
 
     public String getName() {
-        return PluginMetadataHelper.getName(this);
+        return pluginManager.getName(this);
     }
 
     public String getDescription() {
-        return PluginMetadataHelper.getDescription(this);
+        return pluginManager.getDescription(this);
     }
 
     public void initialize(JID jid, ComponentManager componentManager) {
