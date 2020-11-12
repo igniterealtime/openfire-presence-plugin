@@ -6,7 +6,7 @@
     <description>Exposes presence information through HTTP.</description>
     <author>Jive Software</author>
     <version>${project.version}</version>
-    <date>tbc.</date>
+    <date>11/12/2020</date>
     <minServerVersion>4.1.1</minServerVersion>
     
     <adminconsole>		
