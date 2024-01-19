@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2008 Jive Software. All rights reserved.
+ * Copyright (C) 2004-2008 Jive Software, 2024 Ignite Realtime Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -225,11 +225,14 @@ public class PresencePlugin implements Plugin, Component {
             // Return component presence
             return presence;
         }
-        if (targetJID.getNode() == null ||
-                !UserManager.getInstance().isRegisteredUser(targetJID.getNode())) {
+
+        if (targetJID.getNode() == null) {
             // Sender is requesting presence information of an anonymous user
             throw new UserNotFoundException("Username is null");
         }
+        // throws UserNotFound if the user doesn't exist.
+        User user = userManager.getUser(targetJID.getNode());
+
         if (!isPresencePublic()) {
             if (sender == null) {
                 throw new UserNotFoundException("Sender is null");
@@ -243,7 +246,6 @@ public class PresencePlugin implements Plugin, Component {
                 }
             }
         }
-        User user = userManager.getUser(targetJID.getNode());
         return presenceManager.getPresence(user);
     }
 }
