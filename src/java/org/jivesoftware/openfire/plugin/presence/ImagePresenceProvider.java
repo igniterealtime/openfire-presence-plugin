@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2008 Jive Software. All rights reserved.
+ * Copyright (C) 2004-2008 Jive Software, 2024 Ignite Realtime Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +59,9 @@ class ImagePresenceProvider extends PresenceInfoProvider {
 
     private static final Logger Log = LoggerFactory.getLogger(ImagePresenceProvider.class);
     
-    private PresenceStatusServlet servlet;
-    private Map<String, byte[]> imageCache = new HashMap<String, byte[]>();
-    private Map<String, String> imageTypeCache = new HashMap<String, String>();
+    private final PresenceStatusServlet servlet;
+    private final Map<String, byte[]> imageCache = new HashMap<>();
+    private final Map<String, String> imageTypeCache = new HashMap<>();
 
     public ImagePresenceProvider(PresenceStatusServlet servlet) {
         this.servlet = servlet;
@@ -71,29 +71,29 @@ class ImagePresenceProvider extends PresenceInfoProvider {
     public void sendInfo(HttpServletRequest request,
             HttpServletResponse response, Presence presence) throws IOException {
         if (presence == null) {
-            writeImageContent(request, response, "offline", servlet.offline);
+            writeImageContent(request, response, "offline", servlet.getOffline());
         }
         else if (presence.getShow() == null) {
-            writeImageContent(request, response, "available", servlet.available);
+            writeImageContent(request, response, "available", servlet.getAvailable());
         }
         else if (presence.getShow().equals(org.xmpp.packet.Presence.Show.away)) {
-            writeImageContent(request, response, "away", servlet.away);
+            writeImageContent(request, response, "away", servlet.getAway());
         }
         else if (presence.getShow().equals(org.xmpp.packet.Presence.Show.chat)) {
-            writeImageContent(request, response, "chat", servlet.chat);
+            writeImageContent(request, response, "chat", servlet.getChat());
         }
         else if (presence.getShow().equals(org.xmpp.packet.Presence.Show.dnd)) {
-            writeImageContent(request, response, "dnd", servlet.dnd);
+            writeImageContent(request, response, "dnd", servlet.getDnd());
         }
         else if (presence.getShow().equals(org.xmpp.packet.Presence.Show.xa)) {
-            writeImageContent(request, response, "xa", servlet.xa);
+            writeImageContent(request, response, "xa", servlet.getXa());
         }
     }
 
     @Override
     public void sendUserNotFound(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        writeImageContent(request, response, "forbidden", servlet.offline);
+        writeImageContent(request, response, "forbidden", servlet.getOffline());
     }
 
     private void writeImageContent(HttpServletRequest request, HttpServletResponse response,
@@ -122,8 +122,8 @@ class ImagePresenceProvider extends PresenceInfoProvider {
                     URLConnection connection = new URL(url).openConnection();
                     InputStream in = connection.getInputStream();
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    byte buffer[] = new byte[1024 * 4];
-                    int last_read_bytes = 0;
+                    byte[] buffer = new byte[1024 * 4];
+                    int last_read_bytes;
                     while ((last_read_bytes = in.read(buffer)) != -1) {
                         bytes.write(buffer, 0, last_read_bytes);
                     }

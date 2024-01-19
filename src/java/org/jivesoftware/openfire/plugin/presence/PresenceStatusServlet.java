@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2008 Jive Software. All rights reserved.
+ * Copyright (C) 2004-2008 Jive Software, 2024 Ignite Realtime Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,12 +56,12 @@ public class PresenceStatusServlet extends HttpServlet {
     private ImagePresenceProvider imageProvider;
     private TextPresenceProvider textProvider;
 
-    byte available[];
-    byte away[];
-    byte chat[];
-    byte dnd[];
-    byte offline[];
-    byte xa[];
+    private byte[] available;
+    private byte[] away;
+    private byte[] chat;
+    private byte[] dnd;
+    private byte[] offline;
+    private byte[] xa;
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -71,13 +71,7 @@ public class PresenceStatusServlet extends HttpServlet {
         xmlProvider = new XMLPresenceProvider();
         imageProvider = new ImagePresenceProvider(this);
         textProvider = new TextPresenceProvider();
-        available = loadResource("/images/user-green-16x16.gif");
-        away = loadResource("/images/user-yellow-16x16.gif");
-        chat = loadResource("/images/user-green-16x16.gif");
-        dnd = loadResource("/images/user-red-16x16.gif");
-        offline = loadResource("/images/user-clear-16x16.gif");
-        xa = loadResource("/images/user-yellow-16x16.gif");
-        // Exclude this servlet from requering the user to login
+        // Exclude this servlet from requiring the user to login
         AuthCheckFilter.addExclude("presence/status");
     }
 
@@ -91,48 +85,37 @@ public class PresenceStatusServlet extends HttpServlet {
 
         try {
             Presence presence = plugin.getPresence(sender, jid);
-            if ("image".equals(type)) {
-                imageProvider.sendInfo(request, response, presence);
-            }
-            else if ("xml".equals(type)) {
-                xmlProvider.sendInfo(request, response, presence);
-            }
-            else if ("text".equals(type)) {
-                textProvider.sendInfo(request, response, presence);
-            }
-            else {
-                Log.warn("The presence servlet received an invalid request of type: " + type);
-                // TODO Do something
-            }
-        }
-        catch (UserNotFoundException e) {
-            if ("image".equals(type)) {
-                imageProvider.sendUserNotFound(request, response);
-            }
-            else if ("xml".equals(type)) {
-                xmlProvider.sendUserNotFound(request, response);
-            }
-            else if ("text".equals(type)) {
-                textProvider.sendUserNotFound(request, response);
-            }
-            else {
-                Log.warn("The presence servlet received an invalid request of type: " + type);
-                // TODO Do something
+            switch (type) {
+                case "image":
+                    imageProvider.sendInfo(request, response, presence);
+                    break;
+                case "xml":
+                    xmlProvider.sendInfo(request, response, presence);
+                    break;
+                case "text":
+                    textProvider.sendInfo(request, response, presence);
+                    break;
+                default:
+                    Log.warn("The presence servlet received an invalid request of type: " + type);
+                    // TODO Do something
+                    break;
             }
         }
-        catch (IllegalArgumentException e) {
-            if ("image".equals(type)) {
-                imageProvider.sendUserNotFound(request, response);
-            }
-            else if ("xml".equals(type)) {
-                xmlProvider.sendUserNotFound(request, response);
-            }
-            else if ("text".equals(type)) {
-                textProvider.sendUserNotFound(request, response);
-            }
-            else {
-                Log.warn("The presence servlet received an invalid request of type: " + type);
-                // TODO Do something
+        catch (UserNotFoundException | IllegalArgumentException e) {
+            switch (type) {
+                case "image":
+                    imageProvider.sendUserNotFound(request, response);
+                    break;
+                case "xml":
+                    xmlProvider.sendUserNotFound(request, response);
+                    break;
+                case "text":
+                    textProvider.sendUserNotFound(request, response);
+                    break;
+                default:
+                    Log.warn("The presence servlet received an invalid request of type: " + type);
+                    // TODO Do something
+                    break;
             }
         }
     }
@@ -144,7 +127,7 @@ public class PresenceStatusServlet extends HttpServlet {
     }
 
     @Override
-    public void destroy() {
+    public synchronized void destroy() {
         super.destroy();
         available = null;
         away = null;
@@ -158,17 +141,65 @@ public class PresenceStatusServlet extends HttpServlet {
 
     private byte[] loadResource(String path) {
         ServletContext context = getServletContext();
-        InputStream in = context.getResourceAsStream(path);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
+        try (InputStream in = context.getResourceAsStream(path);
+            ByteArrayOutputStream out = new ByteArrayOutputStream())
+        {
             for (int i = in.read(); i > -1; i = in.read()) {
                 out.write(i);
             }
+            return out.toByteArray();
         }
-        catch (IOException e) {
-            Log.error("error loading:" + path);
+        catch (Throwable e) {
+            Log.error("error loading: {}", path, e);
         }
-        return out.toByteArray();
+        return null;
     }
 
+    public synchronized byte[] getAvailable()
+    {
+        if (available == null) {
+            available = loadResource("/images/user-green-16x16.gif");
+        }
+        return available;
+    }
+
+    public synchronized byte[] getAway()
+    {
+        if (away == null) {
+            away = loadResource("/images/user-yellow-16x16.gif");
+        }
+        return away;
+    }
+
+    public synchronized byte[] getChat()
+    {
+        if (chat == null) {
+            chat = loadResource("/images/user-green-16x16.gif");
+        }
+        return chat;
+    }
+
+    public synchronized byte[] getDnd()
+    {
+        if (dnd == null) {
+            dnd = loadResource("/images/user-red-16x16.gif");
+        }
+        return dnd;
+    }
+
+    public synchronized byte[] getOffline()
+    {
+        if (offline == null) {
+            offline = loadResource("/images/user-clear-16x16.gif");
+        }
+        return offline;
+    }
+
+    public byte[] getXa()
+    {
+        if (xa == null) {
+            xa = loadResource("/images/user-yellow-16x16.gif");
+        }
+        return xa;
+    }
 }
