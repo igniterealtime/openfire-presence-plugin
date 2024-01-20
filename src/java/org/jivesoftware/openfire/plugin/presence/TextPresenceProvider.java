@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2008 Jive Software. All rights reserved.
+ * Copyright (C) 2004-2008 Jive Software, Ignite Realtime Foundation 2024. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,12 @@ class TextPresenceProvider extends PresenceInfoProvider {
             catch (UserNotFoundException e) {}
             presence.setFrom(targetJID);
         }
-        out.println(presence.getStatus());
+
+        if (presence.getStatus() != null && !presence.getStatus().isEmpty()) {
+            out.println(presence.getStatus().trim());
+        } else {
+            out.println(JiveGlobals.getProperty("plugin.presence.available.status", "Available"));
+        }
         out.flush();
     }
 
